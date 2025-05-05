@@ -10,7 +10,7 @@ public class EventEmulatorBase<TStorage> {
     protected EventsDataStorage<TStorage> storage;
 
     //decompose, no switches on ints pls...
-    public String Emulate(int eventCount, int clientCount, int executionPath) throws IOException, ExecutionControl.NotImplementedException {
+    public String Emulate(int eventCount, int clientCount, int executionPath) throws IOException {
         return switch (executionPath) {
             case EventEmulatorBase.executionPath.GENERATE -> generate(eventCount, clientCount);
             case EventEmulatorBase.executionPath.READ -> read(eventCount, clientCount);
@@ -23,8 +23,6 @@ public class EventEmulatorBase<TStorage> {
         return storage.write(Stream.generate(new EventGeneratorStreamed(events, clients)).limit(events * clients));
     }
 
-    private static String read(int events, int clients) throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("");
     }
 
     public static class executionPath {
