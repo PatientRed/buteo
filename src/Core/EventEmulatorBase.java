@@ -21,8 +21,14 @@ public class EventEmulatorBase<TStorage> {
     private String generate(int events, int clients) throws IOException {
         //return storage.write(EventGeneratorListed.generate(events, clients));
         return storage.write(Stream.generate(new EventGeneratorStreamed(events, clients)).limit(events * clients));
+
+    private static Stream<Event> visitEvents(Stream<Event> original, Set<Event> visited) {
+        return original.map(ev -> visited.contains(ev) ? visitEvent(ev) : ev);
     }
 
+    //this is a part of Event. please move.
+    private static Event visitEvent(Event ev) {
+        return new Event(ev.eventId(), ev.clientId(), true);
     }
 
     public static class executionPath {
