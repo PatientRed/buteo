@@ -20,7 +20,8 @@ public class EventEmulatorBase<TStorage> {
 
     private String generate(int events, int clients) throws IOException {
         //return storage.write(EventGeneratorListed.generate(events, clients));
-        return storage.write(Stream.generate(new EventGeneratorStreamed(events, clients)).limit(events * clients));
+        return storage.writeAll(Stream.generate(new EventGeneratorStreamed(events, clients)).limit(events * clients));
+    }
 
     private static Stream<Event> visitEvents(Stream<Event> original, Set<Event> visited) {
         return original.map(ev -> visited.contains(ev) ? visitEvent(ev) : ev);
