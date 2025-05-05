@@ -63,7 +63,7 @@ public class CSV implements EventsDataStorage<String> {
     @Override
     public Event deSerializeEvent(String line) throws NumberFormatException, SecurityException {
         var temp = line.split(DELIMITER);
-        return new Event(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), Boolean.getBoolean(temp[2]));
+        return new Event(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), Boolean.parseBoolean(temp[2]));
     }
 
     @Override
