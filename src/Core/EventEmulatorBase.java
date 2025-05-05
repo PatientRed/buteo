@@ -13,7 +13,7 @@ public class EventEmulatorBase<TStorage> {
     public String Emulate(int eventCount, int clientCount, int executionPath) throws IOException {
         return switch (executionPath) {
             case EventEmulatorBase.executionPath.GENERATE -> generate(eventCount, clientCount);
-            case EventEmulatorBase.executionPath.READ -> read(eventCount, clientCount);
+            case EventEmulatorBase.executionPath.TAKE -> process(eventCount, clientCount);
             default -> throw new IllegalArgumentException("Incorrect executionPath provided.");
         };
     }
@@ -33,6 +33,6 @@ public class EventEmulatorBase<TStorage> {
 
     public static class executionPath {
         public static final int GENERATE = 1;
-        public static final int READ = 2;
+        public static final int TAKE = 2;
     }
 }
