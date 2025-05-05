@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -58,6 +59,45 @@ public class CSV implements EventsDataStorage<String> {
         }
 
         return OUTPUT_PATH.toString();
+    }
+
+    //if we don't consume stream before method exit it then cannot be consumed coz file is closed
+    public Stream<Event> readAll(Path path) {
+        try (var data = Files.lines(path)) {
+            return Arrays.stream(data.skip(1).map(this::deSerializeEvent).toArray(Event[]::new));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Stream<Event> readAll(String path) {
+        return readAll(Path.of(path));
+    }
+
+    @Override
+    public Stream<Event> readAll() {
+        return readAll(INPUT_PATH);
+    }
+
+    @Override
+    public String getInputPath() {
+        return INPUT_PATH.toString();
+    }
+
+    @Override
+    public String getOutputPath() {
+        return OUTPUT_PATH.toString();
+    }
+
+    @Override
+    public void redirectInput(String path) {
+        INPUT_PATH = Path.of(path);
+    }
+
+    @Override
+    public void redirectOutput(String path) {
+        OUTPUT_PATH = Path.of(path);
     }
 
     @Override

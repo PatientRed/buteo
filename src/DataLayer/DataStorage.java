@@ -13,4 +13,13 @@ public interface DataStorage<TStorage, TEntity> {
 
     public String writeAll(Stream<Event> stream) throws IOException;
     public String writeAll(List<Event> events) throws IOException;
+
+    public Stream<Event> readAll(String source);
+    public Stream<Event> readAll();
+
+    public String getInputPath();
+    public String getOutputPath();
+
+    public void redirectInput(String source);
+    public void redirectOutput(String source);
 }
