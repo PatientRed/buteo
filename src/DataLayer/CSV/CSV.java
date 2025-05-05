@@ -15,7 +15,6 @@ public class CSV implements EventsDataStorage<String> {
     private Path INPUT_PATH;
     private Path OUTPUT_PATH;
     private final String DELIMITER;
-    private final String LINE_SEPARATOR = System.lineSeparator();
 
     @Override
     public String write(Stream<Event> stream) throws IOException {
@@ -23,11 +22,13 @@ public class CSV implements EventsDataStorage<String> {
                 new StandardOpenOption[]{StandardOpenOption.CREATE,
                         StandardOpenOption.TRUNCATE_EXISTING,
                         StandardOpenOption.WRITE})) {
-            bufferedFile.write(HEADER + LINE_SEPARATOR);
+            bufferedFile.write(HEADER);
+            bufferedFile.newLine();
 
             stream.forEach(ev -> {
                 try {
-                    bufferedFile.write(serializeEvent(ev) + LINE_SEPARATOR);
+                    bufferedFile.write(serializeEvent(ev));
+                    bufferedFile.newLine();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -43,11 +44,13 @@ public class CSV implements EventsDataStorage<String> {
                 new StandardOpenOption[]{StandardOpenOption.CREATE,
                         StandardOpenOption.TRUNCATE_EXISTING,
                         StandardOpenOption.WRITE})) {
-            bufferedFile.write(HEADER + LINE_SEPARATOR);
+            bufferedFile.write(HEADER);
+            bufferedFile.newLine();
 
             events.forEach(ev -> {
                 try {
-                    bufferedFile.write(serializeEvent(ev) + LINE_SEPARATOR);
+                    bufferedFile.write(serializeEvent(ev));
+                    bufferedFile.newLine();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
