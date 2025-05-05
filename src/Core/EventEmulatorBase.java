@@ -9,6 +9,14 @@ import java.util.stream.Stream;
 public class EventEmulatorBase<TStorage> {
     protected EventsDataStorage<TStorage> storage;
 
+    protected void askInputRedirect() {
+        return;
+    }
+
+    protected void askOutputRedirect() {
+        return;
+    }
+
     //decompose, no switches on ints pls...
     public String Emulate(int eventCount, int clientCount, int executionPath) throws IOException {
         return switch (executionPath) {
