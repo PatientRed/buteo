@@ -36,6 +36,27 @@ public class EventEmulatorBase<TStorage> {
         return storage.writeAll(Stream.generate(new EventGeneratorStreamed(events, clients)).limit(events * clients));
     }
 
+    private String process(int events, int clients) throws IOException {
+        askInputRedirect();
+        //thats not optimal but to prove we can guarantee the result and since the file cannot be modified in-place
+        //we took all of its contents into memory [O(n) bytes]
+        //straight alternative will be reading the file multiple times:
+        //1. reading for cache map eventId-not visited clients counting
+        //2. then read-write of selection saving written events in memory
+        //3. and finally reading file third time to rewrite updated contents (using temp file?)
+        var contents = storage.readAll().toArray(Event[]::new);
+
+        //reuse required so additional array created. SEEMS NOT OPTIMAL?
+        var selected = takeFiltered(events, clients, Arrays.stream(contents)).toArray(Event[]::new);
+
+        storage.redirectOutput(newFile(storage.getInputPath()).toString());
+        var result = storage.writeAll(Arrays.stream(selected));
+
+        storage.redirectOutput(storage.getInputPath());
+        storage.writeAll(visitEvents(Arrays.stream(contents), Arrays.stream(selected).collect(Collectors.toSet())));
+
+        return result;
+    }
 
     private static Path newFile(String old) {
         var lastDotIndex = old.lastIndexOf('.');
