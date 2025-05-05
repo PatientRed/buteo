@@ -31,6 +31,15 @@ public class EventEmulatorBase<TStorage> {
         return storage.writeAll(Stream.generate(new EventGeneratorStreamed(events, clients)).limit(events * clients));
     }
 
+
+    private static Path newFile(String old) {
+        var lastDotIndex = old.lastIndexOf('.');
+
+        if (lastDotIndex == -1)
+            return Path.of(old + "_new");
+
+        return Path.of(old.substring(0, lastDotIndex) + "_new" + old.substring(lastDotIndex));
+    }
     private static Stream<Event> visitEvents(Stream<Event> original, Set<Event> visited) {
         return original.map(ev -> visited.contains(ev) ? visitEvent(ev) : ev);
     }
