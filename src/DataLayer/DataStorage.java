@@ -11,6 +11,6 @@ public interface DataStorage<TStorage, TEntity> {
     public TEntity deSerializeEvent(TStorage input);
     public TStorage serializeEvent(TEntity input);
 
-    public String write(Stream<Event> stream) throws IOException;
-    public String write(List<Event> events) throws IOException;
+    public String writeAll(Stream<Event> stream) throws IOException;
+    public String writeAll(List<Event> events) throws IOException;
 }

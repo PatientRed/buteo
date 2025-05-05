@@ -17,7 +17,7 @@ public class CSV implements EventsDataStorage<String> {
     private final String DELIMITER;
 
     @Override
-    public String write(Stream<Event> stream) throws IOException {
+    public String writeAll(Stream<Event> stream) throws IOException {
         try (var bufferedFile = Files.newBufferedWriter(OUTPUT_PATH,
                 new StandardOpenOption[]{StandardOpenOption.CREATE,
                         StandardOpenOption.TRUNCATE_EXISTING,
@@ -39,7 +39,7 @@ public class CSV implements EventsDataStorage<String> {
     }
 
     @Override
-    public String write(List<Event> events) throws IOException {
+    public String writeAll(List<Event> events) throws IOException {
         try (var bufferedFile = Files.newBufferedWriter(OUTPUT_PATH,
                 new StandardOpenOption[]{StandardOpenOption.CREATE,
                         StandardOpenOption.TRUNCATE_EXISTING,
