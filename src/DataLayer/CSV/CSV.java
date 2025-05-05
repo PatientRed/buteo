@@ -12,13 +12,14 @@ import java.util.stream.Stream;
 
 public class CSV implements EventsDataStorage<String> {
     private final String HEADER = "event_id,client_id,visited";
-    private final Path PATH;
+    private Path INPUT_PATH;
+    private Path OUTPUT_PATH;
     private final String DELIMITER;
     private final String LINE_SEPARATOR = System.lineSeparator();
 
     @Override
     public String write(Stream<Event> stream) throws IOException {
-        try (var bufferedFile = Files.newBufferedWriter(PATH,
+        try (var bufferedFile = Files.newBufferedWriter(OUTPUT_PATH,
                 new StandardOpenOption[]{StandardOpenOption.CREATE,
                         StandardOpenOption.TRUNCATE_EXISTING,
                         StandardOpenOption.WRITE})) {
@@ -33,12 +34,12 @@ public class CSV implements EventsDataStorage<String> {
             });
         }
 
-        return PATH.toString();
+        return OUTPUT_PATH.toString();
     }
 
     @Override
     public String write(List<Event> events) throws IOException {
-        try (var bufferedFile = Files.newBufferedWriter(PATH,
+        try (var bufferedFile = Files.newBufferedWriter(OUTPUT_PATH,
                 new StandardOpenOption[]{StandardOpenOption.CREATE,
                         StandardOpenOption.TRUNCATE_EXISTING,
                         StandardOpenOption.WRITE})) {
@@ -53,7 +54,7 @@ public class CSV implements EventsDataStorage<String> {
             });
         }
 
-        return PATH.toString();
+        return OUTPUT_PATH.toString();
     }
 
     @Override
@@ -74,7 +75,8 @@ public class CSV implements EventsDataStorage<String> {
     }
 
     public CSV(String path, char delimiter) {
-        this.PATH = Path.of(path);
+        this.INPUT_PATH = Path.of(path);
+        this.OUTPUT_PATH = this.INPUT_PATH;
         this.DELIMITER = Character.toString(delimiter);
     }
 
